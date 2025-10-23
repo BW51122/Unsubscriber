@@ -1,0 +1,149 @@
+/**
+ * Main Application Styles
+ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-header {
+  padding: 2rem;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--box-shadow);
+}
+
+.app-header h1 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.app-subtitle {
+  margin: 0.5rem 0 0 0;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.app-version {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 4px 12px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Status Section */
+.status-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.status-section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+/* Info Cards Grid */
+.info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.info-card:hover {
+  box-shadow: var(--box-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.info-card h3 {
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.info-card p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Welcome Message */
+.welcome-message {
+  background-color: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border-left: 4px solid var(--color-success);
+}
+
+.welcome-message h3 {
+  color: var(--color-success);
+  margin-bottom: 1rem;
+}
+
+.welcome-message p {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.welcome-message .note {
+  background-color: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+/* Scrollbar Styling */
+.app-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.app-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-main::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.app-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+

@@ -1,0 +1,10 @@
+# This directory contains application assets
+
+Please create the following icon files before running the application:
+
+1. tray-icon.png (16x16 or 32x32 pixels for Windows/Linux)
+2. tray-icon-mac.png (16x16 or 18x18 pixels for macOS)
+
+You can run: npm run create-icons
+to generate simple placeholder icons for development.
+
