@@ -74,6 +74,7 @@ export class BackendManager {
       this.process = spawn(pythonExe, [scriptPath], {
         stdio: ['ignore', 'pipe', 'pipe'],
         windowsHide: true, // Hide console window on Windows
+        cwd: path.dirname(scriptPath), // Set working directory to backend folder
         env: {
           ...process.env,
           PYTHONUNBUFFERED: '1', // Disable Python output buffering
@@ -182,17 +183,13 @@ export class BackendManager {
 
     while (Date.now() - startTime < maxWaitTime) {
       try {
-        logger.debug(`Attempting health check: ${healthUrl}`);
         const response = await axios.get(healthUrl, { timeout: 2000 });
-
-        logger.debug('Health check response', response.data);
 
         if (response.data.status === 'healthy') {
           logger.info('Backend is healthy!');
           return;
         }
       } catch (error) {
-        logger.debug('Health check failed, retrying...', error instanceof Error ? error.message : error);
         // Backend not ready yet, wait and retry
         await new Promise(resolve => setTimeout(resolve, 500));
       }

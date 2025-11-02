@@ -35,6 +35,29 @@ type FilesystemCheckResult = {
   error: string | null;
 };
 
+// Account types for Phase 1.2
+type Account = {
+  id: number;
+  email: string;
+  displayName: string | null;
+  addedTimestamp: string;
+  lastSyncTimestamp: string | null;
+  isRealtimeEnabled: boolean;
+  status: string;
+  pendingSubscriptionsCount: number;
+};
+
+type OAuthFlowResult = {
+  account: Account;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: number;
+    scope: string;
+    tokenType: string;
+  };
+};
+
 // Define the API that will be exposed to the renderer
 const electronAPI = {
   // Backend Management
@@ -72,6 +95,28 @@ const electronAPI = {
   
   getAppPath: (): Promise<string> => 
     ipcRenderer.invoke('app:path'),
+  
+  // Account Management (Phase 1.2)
+  getAccounts: (): Promise<Account[]> => 
+    ipcRenderer.invoke('accounts:list'),
+  
+  startAddAccount: (): Promise<{ authUrl: string; state: string }> => 
+    ipcRenderer.invoke('accounts:add:start'),
+  
+  completeAddAccount: (state: string): Promise<OAuthFlowResult> => 
+    ipcRenderer.invoke('accounts:add:complete', state),
+  
+  deleteAccount: (email: string): Promise<{ success: boolean }> => 
+    ipcRenderer.invoke('accounts:delete', email),
+  
+  onAccountsUpdated: (callback: () => void) => {
+    const subscription = () => callback();
+    ipcRenderer.on('accounts:updated', subscription);
+    
+    return () => {
+      ipcRenderer.removeListener('accounts:updated', subscription);
+    };
+  },
 };
 
 // Expose the API to the renderer process

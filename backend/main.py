@@ -7,16 +7,38 @@ FR-2.1.4: Dynamic port allocation and announcement
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
 from config import settings
 from utils.logger import logger
 from utils.port_finder import PortFinder
 from api.health import router as health_router
+from api.accounts import router as accounts_router
+from db.database import init_db
 
 
 # ============================================================================
 # Application Factory
 # ============================================================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Application lifespan events
+    Replaces deprecated @app.on_event
+    """
+    # Startup
+    logger.info(f"{settings.app_name} v{settings.app_version} starting up")
+    logger.info(f"Debug mode: {settings.debug}")
+    
+    # Initialize database
+    await init_db()
+    
+    yield
+    
+    # Shutdown
+    logger.info("Backend shutting down")
+
 
 def create_app() -> FastAPI:
     """
@@ -31,6 +53,7 @@ def create_app() -> FastAPI:
         description="Backend API for Unsubscriber - AI-powered email subscription manager",
         docs_url="/docs" if settings.debug else None,
         redoc_url="/redoc" if settings.debug else None,
+        lifespan=lifespan,
     )
     
     # Configure CORS - only allow localhost
@@ -45,17 +68,7 @@ def create_app() -> FastAPI:
     
     # Register routers
     app.include_router(health_router, tags=["Health"])
-    
-    # Startup event
-    @app.on_event("startup")
-    async def startup_event():
-        logger.info(f"{settings.app_name} v{settings.app_version} starting up")
-        logger.info(f"Debug mode: {settings.debug}")
-    
-    # Shutdown event
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        logger.info("Backend shutting down")
+    app.include_router(accounts_router, prefix="/accounts", tags=["Accounts"])
     
     return app
 

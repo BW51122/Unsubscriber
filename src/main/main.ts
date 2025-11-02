@@ -8,6 +8,7 @@ import { BackendManager } from './services/backend-manager';
 import { WindowManager } from './services/window-manager';
 import { TrayManager } from './services/tray-manager';
 import { HealthCheckService } from './services/health-check';
+import { TokenManager } from './services/token-manager';
 import { IPCHandlers } from './ipc/ipc-handlers';
 import { SystemChecks } from './utils/system-checks';
 import { logger } from './utils/logger';
@@ -18,6 +19,7 @@ class UnsubscriberApp {
   private windowManager: WindowManager;
   private trayManager: TrayManager;
   private healthCheckService: HealthCheckService;
+  private tokenManager: TokenManager;
   private ipcHandlers: IPCHandlers;
   private isInitialized = false;
 
@@ -26,7 +28,12 @@ class UnsubscriberApp {
     this.windowManager = new WindowManager();
     this.trayManager = new TrayManager(this.windowManager);
     this.healthCheckService = new HealthCheckService(this.backendManager);
-    this.ipcHandlers = new IPCHandlers(this.backendManager, this.windowManager);
+    this.tokenManager = new TokenManager();
+    this.ipcHandlers = new IPCHandlers(
+      this.backendManager,
+      this.windowManager,
+      this.tokenManager
+    );
   }
 
   /**

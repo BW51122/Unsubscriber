@@ -20,6 +20,14 @@ export enum IPCChannel {
   HEALTH_CHECK_START = 'health:start',
   HEALTH_CHECK_STOP = 'health:stop',
   HEALTH_STATUS = 'health:status',
+  
+  // Account Management (Phase 1.2)
+  ACCOUNTS_LIST = 'accounts:list',
+  ACCOUNTS_ADD_START = 'accounts:add:start',
+  ACCOUNTS_ADD_COMPLETE = 'accounts:add:complete',
+  ACCOUNTS_DELETE = 'accounts:delete',
+  ACCOUNTS_REFRESH_TOKEN = 'accounts:refresh-token',
+  ACCOUNTS_UPDATED = 'accounts:updated',
 }
 
 export interface BackendStatus {
@@ -72,3 +80,32 @@ export interface AppError {
   timestamp: number;
 }
 
+// Phase 1.2: Account Management Types
+
+export interface TokenData {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;
+  scope: string;
+  tokenType: string;
+}
+
+export interface Account {
+  id: number;
+  email: string;
+  displayName: string | null;
+  addedTimestamp: string;
+  lastSyncTimestamp: string | null;
+  isRealtimeEnabled: boolean;
+  status: 'active' | 'error' | 'revoked' | 'disabled';
+  pendingSubscriptionsCount: number;
+}
+
+export interface OAuthFlowResult {
+  account: Account;
+  tokens: TokenData;
+}
+
+export interface AccountDeleteConfirmation {
+  email: string;
+}
